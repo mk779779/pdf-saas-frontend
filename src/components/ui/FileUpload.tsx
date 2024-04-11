@@ -21,6 +21,7 @@ const FileUpload = () => {
       file_key: string;
       file_name: string;
     }) => {
+      console.log("f12", file_key, file_name);
       const response = await axios.post("/api/create-chat", {
         file_key,
         file_name,
