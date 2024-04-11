@@ -4,7 +4,9 @@ import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { chats } from "@/lib/db/schema";
-import ChatSideBar from "@/components/ui/ChatSideBar";
+import ChatSideBar from "@/components/ChatSideBar";
+import PDFViewer from "@/components/PDFViewer";
+import ChatComponent from "@/components/ChatComponent";
 
 type Props = {
   params: {
@@ -20,24 +22,30 @@ const ChatPage = async ({ params: { chatId } }: Props) => {
 
   const _chats = await db.select().from(chats).where(eq(chats.userId, userId));
 
-  // if (!_chats) {
-  //   console.log("redirect1");
-  //   return redirect("/");
-  // }
-  // if (!_chats.find((chat) => chat.id === parseInt(chatId))) {
-  //   console.log("redirect2");
+  if (!_chats) {
+    console.log("redirect1");
+    return redirect("/");
+  }
+  if (!_chats.find((chat) => chat.id === parseInt(chatId))) {
+    console.log("redirect2");
 
-  //   return redirect("/");
-  // }
+    return redirect("/");
+  }
+
+  const currentChat = _chats.find((chat) => chat.id === parseInt(chatId));
   return (
     <div className="flex max-h-screen overflow-scroll">
       <div className="flex w-full max-h-screen overflow-scroll">
-        <ChatSideBar chats={_chats} chatId={parseInt(chatId)} />
+        <div className="flex-[1] max-w-xs">
+          <ChatSideBar chats={_chats} chatId={parseInt(chatId)} />
+        </div>
+        <div className="max-h-screen p-4 overflow-scroll flex-[5]">
+          <PDFViewer pdf_url={currentChat?.pdfUrl || ""} />
+        </div>
+        <div className="flex[3] border-1-4 border-1-slate-200">
+          <ChatComponent />
+        </div>
       </div>
-
-      <div className="flex-[1] max-w-xs"> </div>
-      <div className="max-h-screen p-4 overflow-scroll flex-[5]"> </div>
-      <div className="flex[3] border-1-4 border-1-slate-200"> </div>
     </div>
   );
 };

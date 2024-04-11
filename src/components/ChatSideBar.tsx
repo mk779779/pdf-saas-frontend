@@ -1,7 +1,7 @@
 "use client  ";
 import React from "react";
 import { DrizzleChat } from "@/lib/db/schema";
-import { Button } from "./button";
+import { Button } from "./ui/button";
 import Link from "next/link";
 import { MessageCircle, PlusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -37,6 +37,13 @@ const ChatSideBar = ({ chats, chatId }: Props) => {
             </div>
           </Link>
         ))}
+      </div>
+      <div className="absolute bottom-4 left-4">
+        <div className="flex items-center gap-2 text-sm text-slate-500 flex-wrap">
+          <Link href="/">Home</Link>
+          <Link href="/">Source</Link>
+          {/* stripe button */}
+        </div>
       </div>
     </div>
   );
